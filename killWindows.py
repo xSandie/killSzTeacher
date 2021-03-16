@@ -3,9 +3,29 @@ import os
 import pickle
 import time
 import tkinter as tk
-from tkinter import ttk
 import threading
-from multiprocessing import Process
+import configparser
+import os
+import re
+import time
+from typing import List
+import os
+import joblib
+import numpy as np
+import cv2
+from sklearn import neighbors
+
+from split_img import noise_remove_cv2, cut_vertical
+from PIL import Image
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+from selenium import webdriver
+from selenium.webdriver.support.wait import WebDriverWait
+from helper import enter_iframe_by_id
+from helper_class import Info
+from model_my import recogn_code
+
+from mp4 import Mp4info
 
 from helper_class import Info
 from killSZzhongxiaoyou import init_driver, login, make_available, change2new_window, enter_study
