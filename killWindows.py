@@ -1,3 +1,4 @@
+import multiprocessing
 import os
 import pickle
 import time
@@ -90,11 +91,14 @@ class VisWindow():
 
         os.system('notepad readme.txt')
         self.window.wm_attributes('-topmost', 1)
-
+        self.window.protocol('WM_DELETE_WINDOW', self.close_window)
         self.window.mainloop()
 
+    def close_window(self):
+        # 关闭窗口
+        self.window.destroy()
+
     def prepare_killer(self):
-        print(self.account.get(), self.password.get(), self.course_url.get())
         self.start_btn["state"] = tk.DISABLED
         tk.Message(self.window, text="脚本正在运行，将会打开浏览器，如运行失败，请关闭后再重启。", font=('微软雅黑', 12), bg='yellow', width=600).pack()
         info = Info(account=self.account.get(),
@@ -102,7 +106,9 @@ class VisWindow():
                     course_url=self.course_url.get())
         with open("info.pkl", "wb") as f:
             pickle.dump(info, f, 0)
-        run_killer(info)
+        T = threading.Thread(target=run_killer, args=(info,))
+        T.daemon = True
+        T.start()
 
 
 def run_killer(info):
@@ -120,3 +126,5 @@ def run_killer(info):
 
 if __name__ == '__main__':
     VisWindow().start()
+
+
