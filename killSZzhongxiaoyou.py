@@ -2,11 +2,8 @@ import configparser
 import os
 import re
 import time
-from io import BytesIO
 from typing import List
 
-import pytesseract
-import requests
 from PIL import Image
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
@@ -110,8 +107,8 @@ def make_available(global_driver):
 # 第一次点击，进入播放界面
 def first_play_video(global_driver):
     videos = global_driver.find_elements_by_class_name(config.get("cls", "video_tr"))
-    videos[0].click()
-    time.sleep(30)
+    # videos[0].click()
+    # time.sleep(30)
 
 
 # 切换到新窗口

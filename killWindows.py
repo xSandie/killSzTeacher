@@ -142,6 +142,8 @@ def run_killer(info):
     except Exception as e:
         print(e)
         driver.quit()
+        run_killer(info)
+
 
 
 if __name__ == '__main__':
