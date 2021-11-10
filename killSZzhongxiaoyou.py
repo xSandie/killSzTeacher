@@ -2,6 +2,7 @@ import configparser
 import os
 import re
 import time
+from io import BytesIO
 from typing import List
 
 from PIL import Image
@@ -26,8 +27,11 @@ config.read(config_filepath, encoding='utf-8-sig')
 # sections_number = 0  # 这节课有几个单元（阶段）
 # activities_number = 0  # 这个单元（阶段）有几个活动
 
-def init_driver(driver_name: str):
-    options = webdriver.ChromeOptions()
+def init_driver(driver_name: str, chrome_path: str = None):
+    if chrome_path is None:
+        options = webdriver.ChromeOptions()
+    else:
+        options = webdriver.ChromeOptions()
     # options.add_argument(r'--user-data-dir=' + config.get("account", "google_setting"))  # 设置个人资料路径
     driver = webdriver.Chrome(os.path.join(root_dir, driver_name), options=options)
     driver.maximize_window()
@@ -126,18 +130,18 @@ def get_save_code(global_driver, frame_loc):
     # 通过网页截图然后进行截取
     code_img_ele = WebDriverWait(global_driver, 20).until(
         EC.presence_of_element_located((By.ID, 'safecode')))
-    # im = Image.open(BytesIO(code_img_ele.screenshot("code.png")))
-    global_driver.save_screenshot('screenshot.png')
-
-    left = frame_loc[0] + code_img_ele.location['x']
-    top = frame_loc[1] + code_img_ele.location['y']
-    right = frame_loc[0] + code_img_ele.location['x'] + code_img_ele.size['width']
-    bottom = frame_loc[1] + code_img_ele.location['y'] + code_img_ele.size['height']
-
-    im = Image.open('screenshot.png')
-    im = im.crop((left, top, right, bottom))
-    print((left, top, right, bottom))
-    im.save('code.png')
+    # im = Image.open(BytesIO(code_img_ele.save_screenshot("code.png")))
+    # global_driver.save_screenshot('screenshot.png')
+    code_img_ele.screenshot("code.png")
+    # left = frame_loc[0] + code_img_ele.location['x']
+    # top = frame_loc[1] + code_img_ele.location['y']
+    # right = frame_loc[0] + code_img_ele.location['x'] + code_img_ele.size['width']
+    # bottom = frame_loc[1] + code_img_ele.location['y'] + code_img_ele.size['height']
+    #
+    # im = Image.open('screenshot.png')
+    # im = im.crop((left, top, right, bottom))
+    # print((left, top, right, bottom))
+    # im.save('code.png')
     # global_driver.save_screenshot("screenshot.png")  # 对整个浏览器页面进行截图
 
     # pic_location = code_img_ele.get_location()

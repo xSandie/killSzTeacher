@@ -34,8 +34,7 @@ from split_img import noise_remove_cv2, cut_vertical
 model = joblib.load("theta.pkl")
 
 # 验证
-x = []
-y = []
+
 
 
 # pic_full_names = list(os.walk("test"))[0][2]
@@ -62,6 +61,8 @@ y = []
 #         y.append(lb)
 # 读图片+降噪
 def recogn_code(file_name):
+    x = []
+    y = []
     img = cv2.imread(file_name)
     # 转换为灰度图
     im_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
