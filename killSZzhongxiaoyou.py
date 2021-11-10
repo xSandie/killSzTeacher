@@ -21,19 +21,20 @@ config_filepath = os.path.join(root_dir, 'config.ini')  # 路径拼接
 config = configparser.ConfigParser()  # ConfigParser 是用来读取配置文件的包
 config.read(config_filepath, encoding='utf-8-sig')
 
+
 # courses_number = 0  # 总共有几节课
 # sections_number = 0  # 这节课有几个单元（阶段）
 # activities_number = 0  # 这个单元（阶段）有几个活动
 
-def init_driver():
+def init_driver(driver_name: str):
     options = webdriver.ChromeOptions()
     # options.add_argument(r'--user-data-dir=' + config.get("account", "google_setting"))  # 设置个人资料路径
-    driver = webdriver.Chrome(os.path.join(root_dir, "chromedriver.exe"), options=options)
+    driver = webdriver.Chrome(os.path.join(root_dir, driver_name), options=options)
     driver.maximize_window()
     return driver
 
 
-def login(global_driver, info:Info):
+def login(global_driver, info: Info):
     login_url = config.get('account', 'url')
     ac = info.account
     pswd = info.password
@@ -51,7 +52,7 @@ def login(global_driver, info:Info):
         all_login_btn = global_driver.find_element_by_class_name(config.get("cls", "login_btn")).click()
 
 
-def enter_study(global_driver, info:Info):
+def enter_study(global_driver, info: Info):
     global_driver.get(info.course_url)
     first_play_video(global_driver)
     # 获取课程列表，并开始刷
@@ -139,7 +140,6 @@ def get_save_code(global_driver, frame_loc):
     im.save('code.png')
     # global_driver.save_screenshot("screenshot.png")  # 对整个浏览器页面进行截图
 
-
     # pic_location = code_img_ele.get_location()
     # pic_size = code_img_ele.get_size()
     # left = code_img_ele.location['x']
@@ -163,5 +163,3 @@ if __name__ == '__main__':
         enter_study(driver)
     except Exception as e:
         pass
-
-
