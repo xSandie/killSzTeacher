@@ -3,7 +3,6 @@ import os
 import joblib
 import numpy as np
 import cv2
-from sklearn import neighbors
 
 from split_img import noise_remove_cv2, cut_vertical
 

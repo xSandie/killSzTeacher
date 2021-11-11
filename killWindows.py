@@ -161,7 +161,7 @@ class VisWindow():
         T.start()
 
 
-def run_killer(info, driver_name, chrome_path):
+def run_killer(info, driver_name, chrome_path: str = None):
     driver = init_driver(driver_name, chrome_path)
     try:
         login(driver, info)

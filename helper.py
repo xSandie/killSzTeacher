@@ -11,6 +11,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 import platform
 
+from constant import root_dir
+
 
 def judge_os() -> str:
     print(platform.system())
@@ -73,17 +75,18 @@ def allow_flash(driver, url):
 
 def get_save_driver(version: str, os_type: str = "win"):
     file_name = "chromedriver_win32.zip" if os_type == "win" else "chromedriver_mac64.zip"
-    if os.path.exists(file_name):
-        os.remove(file_name)
+    if os.path.exists(os.path.join(root_dir, file_name)):
+        os.remove(os.path.join(root_dir, file_name))
 
     driver_download_url = f"http://npm.taobao.org/mirrors/chromedriver/{version}/{file_name}"
     r = requests.get(driver_download_url)
+    file_name = os.path.join(root_dir, file_name)
     with open(f'{file_name}', 'wb') as code:
         code.write(r.content)
     zip_file = zipfile.ZipFile(f'{file_name}')
     zip_list = zip_file.namelist()  # 压缩文件清单，可以直接看到压缩包内的各个文件的明细
     for f in zip_list:  # 遍历这些文件，逐个解压出来，
-        zip_file.extract(f, '.')
+        zip_file.extract(f, root_dir)
 
 
 if __name__ == '__main__':

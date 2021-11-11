@@ -10,13 +10,15 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium import webdriver
 from selenium.webdriver.support.wait import WebDriverWait
+
+from constant import root_dir
 from helper import enter_iframe_by_id
 from helper_class import Info
 from model_my import recogn_code
 
 from mp4 import Mp4info
 
-root_dir = os.path.split(os.path.realpath(__file__))[0]  # 按照路径将文件名和路径分割开
+
 # config.ini文件路径
 config_filepath = os.path.join(root_dir, 'config.ini')  # 路径拼接
 config = configparser.ConfigParser()  # ConfigParser 是用来读取配置文件的包
@@ -33,7 +35,7 @@ def init_driver(driver_name: str, chrome_path: str = None):
     else:
         options = webdriver.ChromeOptions()
     # options.add_argument(r'--user-data-dir=' + config.get("account", "google_setting"))  # 设置个人资料路径
-    driver = webdriver.Chrome(os.path.join(root_dir, driver_name), options=options)
+    driver = webdriver.Chrome(executable_path=os.path.join(root_dir, driver_name), options=options)
     driver.maximize_window()
     return driver
 
@@ -65,7 +67,7 @@ def enter_study(global_driver, info: Info):
         try:
             kill_single_course(global_driver)
         except Exception as e:
-            pass
+            print(e)
         global_driver.refresh()
         time.sleep(10)
 
@@ -88,9 +90,11 @@ def find_unfinished(global_driver):
 
 def kill_single_course(global_driver):
     time.sleep(30)
-    html = global_driver.execute_script("return document.documentElement.outerHTML")
+    # html = global_driver.execute_script("return document.documentElement.outerHTML")
     pattern = r"file=(.+?)&"
-    mp4_video = re.findall(pattern, html)[0]
+    # mp4_video = re.findall(pattern, html)[0]
+    mp4_video_ele = global_driver.find_element_by_id("myVideo")
+    mp4_video = mp4_video_ele.get_property("src")
     file = Mp4info(mp4_video)
     video_duration: float = file.get_duration()
     sleep_time = int(video_duration) + 120
