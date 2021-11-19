@@ -1,15 +1,8 @@
-import multiprocessing
-import os
 import pickle
-import time
 import tkinter as tk
 import tkinter.messagebox
 import threading
-import configparser
-import os
-import re
 import time
-from typing import List
 import os
 
 from helper import get_save_driver, judge_os
@@ -163,6 +156,7 @@ class VisWindow():
 
 def run_killer(info, driver_name, chrome_path: str = None):
     driver = init_driver(driver_name, chrome_path)
+
     try:
         login(driver, info)
         time.sleep(5)
@@ -171,8 +165,10 @@ def run_killer(info, driver_name, chrome_path: str = None):
         enter_study(driver, info)
     except Exception as e:
         print(e)
+        print("出错了，正在重试")
         driver.quit()
-        run_killer(info, driver_name=driver_name)
+        time.sleep(10)
+        run_killer(info, driver_name=driver_name, chrome_path=chrome_path)
 
 
 if __name__ == '__main__':

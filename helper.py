@@ -77,7 +77,7 @@ def get_save_driver(version: str, os_type: str = "win"):
     file_name = "chromedriver_win32.zip" if os_type == "win" else "chromedriver_mac64.zip"
     if os.path.exists(os.path.join(root_dir, file_name)):
         os.remove(os.path.join(root_dir, file_name))
-
+    version = version.strip()
     driver_download_url = f"http://npm.taobao.org/mirrors/chromedriver/{version}/{file_name}"
     r = requests.get(driver_download_url)
     file_name = os.path.join(root_dir, file_name)

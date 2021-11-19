@@ -16,8 +16,7 @@ from helper import enter_iframe_by_id
 from helper_class import Info
 from model_my import recogn_code
 
-from mp4 import Mp4info
-
+# from mp4 import Mp4info
 
 # config.ini文件路径
 config_filepath = os.path.join(root_dir, 'config.ini')  # 路径拼接
@@ -59,6 +58,7 @@ def login(global_driver, info: Info):
 
 
 def enter_study(global_driver, info: Info):
+    global_driver.set_page_load_timeout(60)
     global_driver.get(info.course_url)
     first_play_video(global_driver)
     # 获取课程列表，并开始刷
@@ -91,15 +91,36 @@ def find_unfinished(global_driver):
 def kill_single_course(global_driver):
     time.sleep(30)
     # html = global_driver.execute_script("return document.documentElement.outerHTML")
-    pattern = r"file=(.+?)&"
+    # pattern = r"file=(.+?)&"
     # mp4_video = re.findall(pattern, html)[0]
     mp4_video_ele = global_driver.find_element_by_id("myVideo")
     mp4_video = mp4_video_ele.get_property("src")
-    file = Mp4info(mp4_video)
-    video_duration: float = file.get_duration()
-    sleep_time = int(video_duration) + 120
-    print(sleep_time)
-    time.sleep(sleep_time)
+    time.sleep(1)
+    # file = Mp4info(mp4_video)
+    # video_duration: float = file.get_duration()
+
+    video_duration = int(global_driver.execute_script("return arguments[0].duration;", mp4_video_ele))
+    now_play_time = fetch_now_process(global_driver)
+    time.sleep(2)
+    first_sleep_time = (video_duration - now_play_time + 60) // 5
+    print("视频全长", video_duration, "s   下次检测时间", first_sleep_time, "s后")
+    time.sleep(first_sleep_time)
+    for _ in range(4):
+        now_play_time = fetch_now_process(global_driver)
+        time.sleep(2)
+        print("还差", video_duration - now_play_time, "s刷完")
+        if video_duration - now_play_time <= 60:
+            time.sleep(60)
+            print("刷完")
+            return
+        time.sleep(first_sleep_time)
+
+
+# 获取当前播放到的时间秒
+def fetch_now_process(global_driver):
+    mp4_video_ele = global_driver.find_element_by_id("myVideo")
+    now_play_time = global_driver.execute_script("return arguments[0].currentTime;", mp4_video_ele)
+    return int(now_play_time)
 
 
 # 使得看视频网址生效
