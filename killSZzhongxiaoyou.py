@@ -33,6 +33,7 @@ def init_driver(driver_name: str, chrome_path: str = None):
         options = webdriver.ChromeOptions()
     else:
         options = webdriver.ChromeOptions()
+    options.binary_location = chrome_path
     # options.add_argument(r'--user-data-dir=' + config.get("account", "google_setting"))  # 设置个人资料路径
     driver = webdriver.Chrome(executable_path=os.path.join(root_dir, driver_name), options=options)
     driver.maximize_window()

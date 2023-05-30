@@ -48,12 +48,12 @@ class VisWindow():
         tk.Label(self.window, text='课程网址👇', font=('微软雅黑', 12)).pack()
         course_url_entry = tk.Entry(self.window, textvariable=self.course_url)
         course_url_entry.pack()
-        tk.Label(self.window, text='谷歌浏览器版本👇', font=('微软雅黑', 12)).pack()
-        chrome_version_entry = tk.Entry(self.window, textvariable=self.chrome_version)
-        chrome_version_entry.pack()
-        tk.Label(self.window, text='谷歌浏览器位置👇', font=('微软雅黑', 12)).pack()
-        chrome_location_entry = tk.Entry(self.window, textvariable=self.chrome_location)
-        chrome_location_entry.pack()
+        # tk.Label(self.window, text='谷歌浏览器版本👇', font=('微软雅黑', 12)).pack()
+        # chrome_version_entry = tk.Entry(self.window, textvariable=self.chrome_version)
+        # chrome_version_entry.pack()
+        # tk.Label(self.window, text='谷歌浏览器位置👇', font=('微软雅黑', 12)).pack()
+        # chrome_location_entry = tk.Entry(self.window, textvariable=self.chrome_location)
+        # chrome_location_entry.pack()
 
         self.start_btn = tk.Button(self.window, text="开始刷课", command=self.prepare_killer)
         self.start_btn.pack()
@@ -78,8 +78,8 @@ class VisWindow():
         self.account.set(info.account)
         self.password.set(info.password)
         self.course_url.set(info.course_url)
-        self.chrome_version.set(info.chrome_version)
-        self.chrome_location.set(info.chrome_location)
+        # self.chrome_version.set(info.chrome_version)
+        # self.chrome_location.set(info.chrome_location)
 
         self.window.title("中小幼刷课脚本")
         self.window.geometry('800x900')
@@ -93,12 +93,12 @@ class VisWindow():
         tk.Label(self.window, text='课程网址👇', font=('微软雅黑', 12)).pack()
         course_url_entry = tk.Entry(self.window, textvariable=self.course_url)
         course_url_entry.pack()
-        tk.Label(self.window, text='谷歌浏览器版本👇', font=('微软雅黑', 12)).pack()
-        chrome_version_entry = tk.Entry(self.window, textvariable=self.chrome_version)
-        chrome_version_entry.pack()
-        tk.Label(self.window, text='谷歌浏览器位置👇', font=('微软雅黑', 12)).pack()
-        chrome_location_entry = tk.Entry(self.window, textvariable=self.chrome_location)
-        chrome_location_entry.pack()
+        # tk.Label(self.window, text='谷歌浏览器版本👇', font=('微软雅黑', 12)).pack()
+        # chrome_version_entry = tk.Entry(self.window, textvariable=self.chrome_version)
+        # chrome_version_entry.pack()
+        # tk.Label(self.window, text='谷歌浏览器位置👇', font=('微软雅黑', 12)).pack()
+        # chrome_location_entry = tk.Entry(self.window, textvariable=self.chrome_location)
+        # chrome_location_entry.pack()
 
         self.start_btn = tk.Button(self.window, text="开始刷课", command=self.prepare_killer)
         self.start_btn.pack()
@@ -116,9 +116,9 @@ class VisWindow():
         account = self.account.get()
         password = self.password.get()
         course_url = self.course_url.get()
-        chrome_version = self.chrome_version.get()
+        # chrome_version = self.chrome_version.get()
         # chrome_location = self.chrome_location.get()
-        if all([account, password, course_url, chrome_version]):
+        if all([account, password, course_url]):
             return True
         return False
 
@@ -128,12 +128,13 @@ class VisWindow():
             return
 
         self.start_btn["state"] = tk.DISABLED
-        tk.Message(self.window, text="脚本正在运行，将会打开浏览器，如运行失败，请关闭后再重启。", font=('微软雅黑', 12), bg='yellow', width=600).pack()
+        tk.Message(self.window, text="脚本正在运行，将会打开浏览器，如运行失败，请关闭后再重启。", font=('微软雅黑', 12),
+                   bg='yellow', width=600).pack()
         info = Info(account=self.account.get(),
                     password=self.password.get(),
                     course_url=self.course_url.get(),
-                    chrome_version=self.chrome_version.get(),
-                    chrome_location=self.chrome_location.get(),
+                    # chrome_version=self.chrome_version.get(),
+                    # chrome_location=self.chrome_location.get(),
                     )
         os_type = judge_os()
 
@@ -142,11 +143,11 @@ class VisWindow():
             "win": "chromedriver.exe",
         }[os_type]
 
-        if os.path.exists(file_name):
-            pass
-        else:
-            get_save_driver(version=self.chrome_version.get(), os_type=os_type)
-
+        # if os.path.exists("chromedriver.exe"):
+        #     pass
+        # else:
+        #     get_save_driver(version=self.chrome_version.get(), os_type=os_type)
+        file_name = os.path.join(os.getcwd(),file_name)
         with open("info.pkl", "wb") as f:
             pickle.dump(info, f, 0)
         T = threading.Thread(target=run_killer, args=(info, file_name))
@@ -155,6 +156,8 @@ class VisWindow():
 
 
 def run_killer(info, driver_name, chrome_path: str = None):
+    chrome_path = os.path.join(os.getenv("LOCALAPPDATA"), "Chromium","Application","chrome.exe")
+    print(chrome_path)
     driver = init_driver(driver_name, chrome_path)
 
     try:

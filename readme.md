@@ -8,7 +8,7 @@
 ## 🥂 二次开发篇
 ### 技术方案简介
 > 本项目基于 python3.7
-- 使用以selenium+chrome为主的web自动化测试的那套方案，为使项目能自动播放flash特采用旧版本chrome及对应驱动。
+- 使用以selenium+chromium为主的web自动化测试的那套方案，为使项目能自动播放，运行时需要放入对应驱动。
 
 - 验证码使用sklearn的knn方法，训练了一个简易神经网络，具体方案见 gen.py、model_my.py、split_img.py三个文件。
 
